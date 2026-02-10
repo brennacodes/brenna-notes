@@ -2,6 +2,7 @@
 title: "OpenClaw Deep Dive: Architecture, Power, and Risk"
 description: "A comprehensive look at OpenClaw — the always-on AI agent that runs locally, connects to your messaging apps, and executes real actions on your machine. How it works, why people love it, and why security researchers are sounding alarms."
 date: 2026-02-09
+lastmod: 2026-02-09
 tags:
   - programming
   - security
@@ -14,13 +15,13 @@ author: "Brenna"
 
 OpenClaw is an open-source AI agent that runs on your machine as a persistent background process. You talk to it through WhatsApp, Telegram, Signal, Discord, Slack, iMessage, or a web chat. It talks back — and then it *does things*. Shell commands, file operations, browser automation, calendar management, message sending. Not simulated. Actually executed.
 
-It has over 100K GitHub stars and a growing community of people who use it daily. It's also been called a "security nightmare" by Cisco, CrowdStrike, and Trend Micro. Both of these things are true at the same time.
+It has over 100K GitHub stars and a growing community of people who use it daily. It's also been called a "security nightmare" by [Cisco](https://www.cisco.com/), [CrowdStrike](https://www.crowdstrike.com/), and [Trend Micro](https://www.trendmicro.com/). Both of these things are true at the same time.
 
 This post is a deep dive into how OpenClaw works, what makes it powerful, and why the features that make it useful are exactly what make it dangerous.
 
 ## What OpenClaw Actually Is
 
-OpenClaw (formerly Clawdbot, then Moltbot) was created by Peter Steinberger. It's MIT-licensed, runs locally, and connects to an LLM — Claude, GPT, DeepSeek, or others — to power an autonomous agent that lives in your messaging apps.
+OpenClaw (formerly Clawdbot, then Moltbot) was created by [Peter Steinberger](https://steipete.me/). It's MIT-licensed, runs locally, and connects to an LLM — Claude, GPT, DeepSeek, or others — to power an autonomous agent that lives in your messaging apps.
 
 The key distinction from a chatbot: **OpenClaw has tools that interact with your system.** It reads and writes files, executes shell commands, controls browsers, sends messages across platforms, and manages calendars. It runs continuously, even when you're not actively chatting with it. You can tell it "remind me about X tomorrow" and it actually fires tomorrow.
 
@@ -49,11 +50,11 @@ When a message arrives, OpenClaw runs a standard tool-use loop:
 4. **Check response** — tool call? Execute it, feed the result back, loop to step 3. Text? Stream it to the user.
 5. **Repeat** until resolution or the 600-second timeout
 
-This is the same loop that Claude Code and other agent frameworks use. The difference is that OpenClaw's runs *continuously* across conversations, maintaining context and able to act proactively.
+This is the same loop that [Claude Code](https://github.com/anthropics/claude-code) and other agent frameworks use. The difference is that OpenClaw's runs *continuously* across conversations, maintaining context and able to act proactively.
 
 ### The Agent Engine: Pi
 
-The LLM agent loop isn't built from scratch. It's powered by **Pi** (`@mariozechner/pi-agent-core`), a minimal agent core written by Mario Zechner (creator of the libGDX game framework).
+The LLM agent loop isn't built from scratch. It's powered by **[Pi](https://github.com/badlogic/pi-mono)** (`@mariozechner/pi-agent-core`), a minimal agent core written by [Mario Zechner](https://marioslab.io/) (creator of the [libGDX](https://libgdx.com/) game framework).
 
 Pi's design philosophy is extreme minimalism:
 
@@ -70,11 +71,11 @@ OpenClaw connects to messaging platforms through built-in adapters:
 
 | Channel | How it connects |
 |---------|----------------|
-| WhatsApp | Web protocol (headless browser session) |
-| Telegram | Bot API |
-| Discord | Bot SDK |
-| Slack | Bot SDK |
-| Signal | Signal protocol |
+| [WhatsApp](https://www.whatsapp.com/) | Web protocol (headless browser session) |
+| [Telegram](https://telegram.org/) | Bot API |
+| [Discord](https://discord.com/) | Bot SDK |
+| [Slack](https://slack.com/) | Bot SDK |
+| [Signal](https://signal.org/) | Signal protocol |
 | iMessage | AppleScript / macOS system integration |
 | Web chat | Built-in web server |
 
@@ -121,8 +122,8 @@ OpenClaw's own security documentation states: **"prompt injection is not solved.
 
 The agent reads emails, web pages, documents, and messages. Any of that content can contain adversarial instructions that trick the LLM into executing unintended actions. This isn't theoretical:
 
-- **Zenity researchers** embedded a prompt injection payload in a Google Doc that directed OpenClaw to create a new Telegram bot integration, establishing a backdoor
-- **HiddenLayer researchers** had OpenClaw summarize a malicious web page that commanded it to download and execute a shell script
+- **[Zenity](https://zenity.io/) researchers** embedded a prompt injection payload in a Google Doc that directed OpenClaw to create a new Telegram bot integration, establishing a backdoor
+- **[HiddenLayer](https://www.hiddenlayer.com/) researchers** had OpenClaw summarize a malicious web page that commanded it to download and execute a shell script
 
 Both were demonstrated in controlled environments. The attacks worked because the model processes everything in its context — trusted instructions and untrusted content — as the same text.
 
@@ -130,11 +131,11 @@ Both were demonstrated in controlled environments. The attacks worked because th
 
 The ClawHub marketplace has been a major attack vector:
 
-- **Snyk** scanned all ~3,984 ClawHub skills and found **283 (7.1%)** contained flaws exposing credentials — API keys, passwords, even credit card numbers passed through the LLM's context window in plaintext
+- **[Snyk](https://snyk.io/)** scanned all ~3,984 ClawHub skills and found **283 (7.1%)** contained flaws exposing credentials — API keys, passwords, even credit card numbers passed through the LLM's context window in plaintext
 - **341 malicious skills** were found distributing Atomic Stealer malware via fake prerequisites on macOS
 - **Snyk's ToxicSkills study** found 1,467 malicious payloads across the ecosystem, with 36% containing prompt injection
 
-Skills run with Gateway privileges. An npm-installed skill can execute lifecycle scripts during installation. OpenClaw has since integrated VirusTotal scanning, but that only catches known malware signatures — prompt injection payloads aren't traditional malware.
+Skills run with Gateway privileges. An npm-installed skill can execute lifecycle scripts during installation. OpenClaw has since integrated [VirusTotal](https://www.virustotal.com/) scanning, but that only catches known malware signatures — prompt injection payloads aren't traditional malware.
 
 ### 4. Credential Leakage and Exposed Servers
 
@@ -168,3 +169,28 @@ OpenClaw's situation is a preview of where all agentic AI is headed. As agents g
 The honest answer right now is that there isn't a good solution. You can reduce the risk surface, add layers of defense, audit configurations, and isolate untrusted contexts. But as long as the model processes untrusted text alongside trusted instructions in the same context window, the fundamental vulnerability remains.
 
 OpenClaw at least has the virtue of being transparent about this. Their docs say prompt injection isn't solved. Their code is open for audit. Whether that transparency is enough to justify running an always-on agent with shell access on your machine — that's the question each user has to answer for themselves.
+
+---
+
+## Mentioned in This Post
+
+**People**
+- [Peter Steinberger](https://steipete.me/) — Creator of OpenClaw ([GitHub](https://github.com/steipete))
+- [Mario Zechner](https://marioslab.io/) — Creator of Pi agent core and libGDX ([GitHub](https://github.com/badlogic))
+
+**Projects and Tools**
+- [Pi agent core](https://github.com/badlogic/pi-mono) — Minimal LLM agent framework powering OpenClaw
+- [libGDX](https://libgdx.com/) — Open-source game framework by Mario Zechner
+- [Claude Code](https://github.com/anthropics/claude-code) — Anthropic's CLI-based AI coding agent
+- [VirusTotal](https://www.virustotal.com/) — Malware and URL scanning service by Google
+
+**Security Research**
+- [Zenity](https://zenity.io/) — AI security research; demonstrated prompt injection via Google Docs
+- [HiddenLayer](https://www.hiddenlayer.com/) — AI security research; demonstrated malicious web page exploit
+- [Snyk](https://snyk.io/) — Developer security; audited ClawHub skills for credential exposure
+- [Cisco](https://www.cisco.com/) — Flagged OpenClaw as a security concern
+- [CrowdStrike](https://www.crowdstrike.com/) — Flagged OpenClaw as a security concern
+- [Trend Micro](https://www.trendmicro.com/) — Flagged OpenClaw as a security concern
+
+**Messaging Platforms**
+- [WhatsApp](https://www.whatsapp.com/) | [Telegram](https://telegram.org/) | [Signal](https://signal.org/) | [Discord](https://discord.com/) | [Slack](https://slack.com/)

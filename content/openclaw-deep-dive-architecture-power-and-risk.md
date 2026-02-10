@@ -38,7 +38,7 @@ Everything in OpenClaw flows through a single long-running process called the **
 - Serializes agent runs per-session to prevent race conditions
 - Stores credentials, transcripts, and state in `~/.openclaw/`
 
-Every message from every channel passes through it. Every action the agent takes originates from it. If OpenClaw is an octopus, the Gateway is the brain.
+Every message from every channel passes through it. Every action the agent takes originates from it. It's the air traffic control tower — nothing lands or takes off without going through it first.
 
 ### The Agent Loop
 

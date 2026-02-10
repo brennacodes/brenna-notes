@@ -1,6 +1,5 @@
 ---
-title: Welcome to Quartz
+title: brennacodes
 ---
 
-This is a blank Quartz installation.
-See the [documentation](https://quartz.jzhao.xyz) for how to get started.
+Notes on programming, security, tools, and things I'm learning.

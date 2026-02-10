@@ -13,11 +13,9 @@ draft: false
 author: "Brenna"
 ---
 
-So there's this open-source AI agent called OpenClaw. It runs on your machine as a persistent background process. You talk to it through WhatsApp, Telegram, Signal, Discord, Slack, iMessage, or a web chat. It talks back — and then it *does things*. Shell commands, file operations, browser automation, calendar management, message sending. Not pretend. Actually executed. On your actual computer.
+OpenClaw is an open-source AI agent that runs on your machine as a persistent background process. You talk to it through WhatsApp, Telegram, Signal, Discord, Slack, iMessage, or a web chat. It talks back — and then it *does things*. Shell commands, file operations, browser automation, calendar management, message sending. Not pretend. Actually executed. On your actual computer.
 
-It has over 100K GitHub stars and a growing community of people who use it daily. It's also been called a "security nightmare" by Cisco, CrowdStrike, and Trend Micro.
-
-Both of those things are true at the same time. Buckle up.
+It has over 100K GitHub stars. Cisco's [Talos Intelligence group](https://blog.talosintelligence.com/openclaw-ai-agent-security-risks/) called it a "security nightmare." CrowdStrike and Trend Micro have published similar warnings. People use it daily anyway — because when it works, the productivity gains are genuinely hard to give up. That tension between power and risk is the whole story here.
 
 ## What OpenClaw Actually Is
 

@@ -15,7 +15,7 @@ author: "Brenna"
 
 So there's this open-source AI agent called OpenClaw. It runs on your machine as a persistent background process. You talk to it through WhatsApp, Telegram, Signal, Discord, Slack, iMessage, or a web chat. It talks back — and then it *does things*. Shell commands, file operations, browser automation, calendar management, message sending. Not pretend. Actually executed. On your actual computer.
 
-It has over 100K GitHub stars and a growing community of people who use it daily. It's also been called a "security nightmare" by [Cisco](https://www.cisco.com/), [CrowdStrike](https://www.crowdstrike.com/), and [Trend Micro](https://www.trendmicro.com/).
+It has over 100K GitHub stars and a growing community of people who use it daily. It's also been called a "security nightmare" by Cisco, CrowdStrike, and Trend Micro.
 
 Both of those things are true at the same time. Buckle up.
 
@@ -71,11 +71,11 @@ OpenClaw connects to messaging platforms through built-in adapters:
 
 | Channel | How it connects |
 |---------|----------------|
-| [WhatsApp](https://www.whatsapp.com/) | Web protocol (headless browser session) |
-| [Telegram](https://telegram.org/) | Bot API |
-| [Discord](https://discord.com/) | Bot SDK |
-| [Slack](https://slack.com/) | Bot SDK |
-| [Signal](https://signal.org/) | Signal protocol |
+| WhatsApp | Web protocol (headless browser session) |
+| Telegram | Bot API |
+| Discord | Bot SDK |
+| Slack | Bot SDK |
+| Signal | Signal protocol |
 | iMessage | AppleScript / macOS system integration |
 | Web chat | Built-in web server |
 

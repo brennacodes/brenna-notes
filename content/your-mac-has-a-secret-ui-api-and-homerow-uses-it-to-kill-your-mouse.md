@@ -117,7 +117,9 @@ With it:
 - Ability to trigger actions on any element
 - Ability to inject synthetic mouse/keyboard events
 
-macOS gates this behind a manual toggle in System Settings because an app with this permission can see everything on screen and interact with anything. That's incredibly powerful for legitimate tools like screen readers, window managers, and yeah, keyboard navigation apps. It's also the exact set of capabilities you'd want if you were building something [less well-intentioned](/the-security-problem-ai-cant-solve-yet) (see: [OpenClaw](/openclaw-deep-dive-architecture-power-and-risk)).
+This is macOS protecting you from apps silently reading your screen or clicking things without your knowledge. Granting Accessibility permission is you saying "yes, I trust this app to see and interact with my UI." It's the same permission that screen readers, automation tools, and window managers need.
+
+It's also the same permission that [malicious software would love to have](https://objective-see.org/blog/blog_0x49.html), which is why macOS makes it an explicit, manual toggle rather than something apps can request programmatically. You have to physically go into System Settings and flip the switch. That's incredibly powerful for legitimate tools like keyboard navigation apps. It's also the exact set of capabilities you'd want if you were building something [less well-intentioned](/the-security-problem-ai-cant-solve-yet) (see: [OpenClaw](/openclaw-deep-dive-architecture-power-and-risk)).
 
 The permission is an all-or-nothing deal. There's no "let this app read my UI but not click things" option. You either trust it fully or not at all.
 

@@ -8,6 +8,7 @@ tags:
   - agentic-coding
   - claude-code
 draft: false
+lastmod: 2026-02-13
 author: "Brenna"
 ---
 
@@ -104,9 +105,35 @@ That's it. Next time you (or Claude) makes a commit, the trailer gets silently r
 
 ## But what about `--no-verify`?
 
-Ah, the escape hatch. `git commit --no-verify` skips all hooks, which means Claude (or anyone) could bypass your shiny new hook. If you're using Claude Code and want to make sure this can't be circumvented, you can set up a [Claude Code command hook](https://github.com/anthropics/claude-code/issues/617) that blocks `--no-verify` before the command even reaches git.
+Ah, the escape hatch. `git commit --no-verify` skips all hooks, which means Claude (or anyone) could bypass your shiny new hook. If you're using Claude Code and want to make sure this can't be circumvented, you can set up a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) that blocks `--no-verify` before the command even reaches git.
 
-That's a deeper rabbit hole - intercepting commands, regex-scanning for flag combinations, handling shell wrappers - and honestly it's probably overkill for most people. But if you want to go full landlord and truly lock the door, the tools exist.
+### Locking the door with a PreToolUse hook
+
+Claude Code supports [hooks](https://docs.anthropic.com/en/docs/claude-code/hooks) — rules that run before or after tool calls. A `PreToolUse` hook on `Bash` lets you inspect every shell command Claude is about to run and block it if it trips your rules.
+
+Add this to your `.claude/settings.json` (or project-level `.claude/settings.local.json`):
+
+```json title=".claude/settings.json"
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command // empty' | grep -q 'git commit' && jq -r '.tool_input.command // empty' | grep -q '\\-\\-no-verify' && echo 'BLOCK: Do not use --no-verify. Git hooks must run.' && exit 2; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+What's happening here: the hook receives the tool input as JSON on stdin. It pipes it through `jq` to extract the command, then checks if it's a `git commit` that includes `--no-verify`. If both match, it prints a block message and exits with code 2 (which tells Claude Code to reject the tool call). Otherwise it exits cleanly and the command proceeds.
+
+Now if Claude tries to sneak a `--no-verify` past your commit-msg hook, it gets shut down before git even sees the command. Full landlord mode achieved.
 
 ## The vibe check
 
@@ -122,5 +149,6 @@ Happy committing.
 
 - [Git Hooks Documentation](https://git-scm.com/docs/githooks) - Official git docs on hooks, including the `commit-msg` hook and `core.hooksPath` configuration
 - [Claude Code](https://www.anthropic.com/claude-code) - Anthropic's CLI coding agent that adds the co-author trailers
+- [Claude Code Hooks](https://docs.anthropic.com/en/docs/claude-code/hooks) - Official docs on PreToolUse, PostToolUse, and other hook events for intercepting Claude's actions
 - [Claude Code Co-Author Feature Request](https://github.com/anthropics/claude-code/issues/617) - The GitHub issue where people have been asking for a built-in toggle
 - [HN: Claude Code commit stats](https://news.ycombinator.com/item?id=45329240) - The Hacker News thread discussing Claude Code's growing share of public commits

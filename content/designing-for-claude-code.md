@@ -12,6 +12,7 @@ tags:
   - best-practices
   - guide
 draft: false
+lastmod: 2026-02-25
 author: "Brenna"
 ---
 
@@ -35,6 +36,13 @@ Multiple practitioners have independently discovered that CLAUDE.md rules and pr
 
 I've felt this one personally. I had rules in my CLAUDE.md that Claude followed perfectly for the first 20 minutes of a session, and then just... stopped. Not maliciously. It just got crowded out by more immediate context. That's when hooks clicked for me.
 
+Another way to think about this: **who is the primary audience for what you're writing?**
+
+- **If it's Claude as a task execution engine** - the thing you're building is instructions for Claude to follow precisely. That should be 99.9% XML. Structured steps, explicit conditions, no ambiguity. You're programming behavior, not having a conversation.
+- **If it's Claude as a reasoning partner** - maybe you need Claude to think through something you're not sure about yourself, or you're building a chatbot-style experience. That should be a plain prompt, or a more structured prompt in a markdown file somewhere. Bonus points if you structure it so it's reusable.
+
+The format should match the intent. When I'm writing a skill that deploys code, that's XML - Claude doesn't need to reason about whether to run the linter, it needs to *run the linter*. When I'm writing a skill that helps me brainstorm a blog post topic, that's conversational markdown - I *want* Claude to improvise.
+
 ### 2. Progressive disclosure over upfront loading
 
 > Only load what's needed, when it's needed. Metadata is cheap; full context is expensive.
@@ -49,7 +57,11 @@ This is by design: the context window is a shared resource, and every token your
 
 The most-cited best practices compilation - [shanraisshan's claude-code-best-practice repo](https://github.com/shanraisshan/claude-code-best-practice) - states it definitively: "Simple control loops outperform multi-agent systems. Low-level tools (Bash, Read, Edit) plus selective high-level abstractions beat heavy RAG or complex frameworks."
 
-The most successful Claude Code users I've seen keep systems simple and iterate continuously, refining CLAUDE.md, skills, and workflows based on what Claude gets wrong. I'm one of them. My plugins have gone through four major versions, and every version got *simpler*, not more complex.
+But here's the nuance: it's *unrestrained* complexity that decays. Your overall workflow can absolutely be complex - in fact, most real-world workflows are. The key is that complexity should be *composed from simple, digestible pieces*, not piled into a monolith.
+
+I've been exploring a pattern where shared workflows and workflow steps get composed at runtime as needed. Think of it like function decomposition, but for Claude instructions. Each piece is small enough to understand in isolation, and you assemble them into larger workflows by referencing shared steps. The benefits are real: your workflows stay maintainable, each invocation only pulls in the context it needs (saving tokens for the actual work), and when something breaks, you know exactly which piece to fix.
+
+The most successful Claude Code users I've seen keep *individual components* simple and iterate continuously - refining CLAUDE.md, skills, and workflows based on what Claude gets wrong. I'm one of them. My plugins have gone through four major versions, and every version got simpler at the component level, even as the overall system got more capable.
 
 ---
 
@@ -87,18 +99,21 @@ Bad candidates:
 
 #### The compaction survival pattern
 
-This one deserves special attention because it solves a problem that will bite you eventually. Long sessions trigger context compaction, and Claude can "forget" important rules. The fix:
+This one deserves special attention because it solves a problem that will bite you eventually. Long sessions trigger context compaction, and Claude can "forget" important rules.
+
+The early community pattern was a PreToolUse hook on UserPromptSubmit that re-injects rules via `cat .claude/rules.txt` on every prompt. That works, but it's blunt - you're burning tokens re-injecting the same rules whether compaction happened or not.
+
+A more powerful approach uses the **PreCompact** hook event with an agent-type hook. PreCompact fires right before compaction happens, so you can have an agent capture the full session state *before* it gets compressed:
 
 ```json title="settings.json"
 {
   "hooks": {
-    "PreToolUse": [
+    "PreCompact": [
       {
-        "matcher": "UserPromptSubmit",
         "hooks": [
           {
-            "type": "command",
-            "command": "cat .claude/rules.txt"
+            "type": "agent",
+            "prompt": "Record everything we've discussed in this session and any existing task lists with the current state of the task list to `.claude/local/sessions/<datetime>-short-description.md`. If this file already exists from a previous compaction, append to it rather than overwriting."
           }
         ]
       }
@@ -107,7 +122,9 @@ This one deserves special attention because it solves a problem that will bite y
 }
 ```
 
-This re-injects your core rules into the context window on every prompt. Claude can't "forget" what's staring it in the face. Multiple community members independently converged on this pattern as a solution to context rot.
+This gives you a full session journal that survives compaction. Instead of fighting context rot by re-injecting rules, you're preserving the actual context. The agent captures what matters - decisions made, tasks in progress, context that would otherwise be lost - and writes it to a file Claude can reference after compaction.
+
+You can combine both approaches: PreCompact for session preservation, plus a lightweight UserPromptSubmit hook that re-injects just your non-negotiable rules (the ones Claude should never deprioritize regardless of context).
 
 ### 2. Is this reusable knowledge, a workflow, or a procedure Claude should follow?
 
@@ -124,9 +141,25 @@ Good candidates:
 - Procedures with decision points Claude needs to reason through
 - Anything invoked by the user via `/skill-name`
 
+#### Skills can restrict tools too
+
+This one's important because it blurs the line between skills and subagents in a useful way. Skills can declare `allowed-tools` in their YAML frontmatter:
+
+```yaml
+---
+name: deploy
+description: Production deployment workflow
+allowed-tools: [Read, Glob, Grep, Bash, WebSearch]
+---
+```
+
+When a skill declares `allowed-tools`, Claude is restricted to *only* those tools while executing the skill. No Write, no Edit, no accidentally modifying code during a read-only review workflow. This means you get tool restrictions - one of the primary reasons to reach for a subagent - without the overhead of spawning a separate context. The skill runs in your main conversation, with your full context, but with guardrails on what it can do. One less reason to create agents for everything.
+
 #### Skill design principles
 
 **Keep SKILL.md under 500 lines.** Move reference material, templates, examples, and data into supporting files in the skill directory. Once Claude loads SKILL.md, every token competes with conversation history. Supporting files have zero context cost until read.
+
+**Use tons of reference files.** This is the single most impactful thing you can do for token efficiency. Reference files - anything in your skill directory that isn't SKILL.md itself - cost *nothing* until Claude actually reads them. Templates, examples, platform-specific rules, data schemas, lookup tables - all of it should be in separate files. Your SKILL.md should be the lightest thing in the directory: just the instructions for *what to do* and pointers to *where the details live*. Every line you move from SKILL.md into a reference file is a line that only consumes tokens when it's actually relevant.
 
 **Use XML for structured workflows.** When the skill defines a predictable sequence of steps, wrap them in XML tags. Anthropic's own prompting docs confirm that XML tags help Claude parse prompts more accurately, leading to higher-quality outputs. XML is especially valuable for branching workflows where Claude needs to follow different paths based on conditions - the tags make the boundaries explicit and prevent Claude from improvising when it shouldn't.
 
@@ -182,7 +215,9 @@ description: >
 
 **Use a Subagent.**
 
-Subagents get their own context window, their own system prompt, and their own tool permissions. Use them when the work would pollute your main conversation, when you need tool restrictions for safety, or when the task is truly independent.
+Subagents get their own context window, their own system prompt, and their own tool permissions. Use them when the work would pollute your main conversation or when the task is truly independent.
+
+Note: if you *only* need tool restrictions, consider using a skill with `allowed-tools` in its frontmatter first (see above). You get the same guardrails without the overhead of a separate context. Save subagents for when you genuinely need context isolation.
 
 Good candidates:
 - Code review (isolated from the implementation context)
@@ -412,7 +447,11 @@ SessionStart hook
   → Loads relevant session memory
 
 PreToolUse hook (on UserPromptSubmit)
-  → Re-injects critical rules (the compaction survival pattern)
+  → Re-injects non-negotiable rules
+
+PreCompact hook (agent type)
+  → Preserves full session state to .claude/local/sessions/
+  → Captures task lists, decisions, context before compression
 
 PostToolUse hook (on Write/Edit)
   → Runs formatter
@@ -490,7 +529,8 @@ Templates belong in separate files within the skill directory. They get read on-
 
 ### 7. Ignoring Compaction and Context Rot
 Context rot - where Claude gradually deprioritizes earlier instructions - is the primary failure mode in long sessions. Multiple community voices call this the #1 issue. Mitigate with:
-- **PreToolUse hooks** that re-inject critical rules (the compaction survival pattern)
+- **PreCompact hooks** (agent type) that preserve session state before compression
+- **UserPromptSubmit hooks** that re-inject non-negotiable rules
 - **Session memory** for automatic cross-session persistence
 - **Tasks** for structured progress tracking that survives compaction
 - **Aggressive `/clear` usage** when switching topics
@@ -509,7 +549,7 @@ I've seen developers building bloated MCP servers with dozens of tools that just
 |---|---|---|
 | "Always format on save" | Hook (PostToolUse) | Deterministic, no tokens |
 | "Block rm -rf" | Hook (PreToolUse) | Must happen every time |
-| "Survive compaction" | Hook (PreToolUse on UserPromptSubmit) | Re-injects rules every prompt |
+| "Survive compaction" | Hook (PreCompact, agent type) | Preserves session state before compression |
 | "Notify me when done" | Hook (Notification/Stop) | No more watching the terminal |
 | "How to deploy" | Skill | Multi-step procedure with judgment |
 | "Our API conventions" | Skill or Rule | Domain knowledge, loaded on-demand |

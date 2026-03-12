@@ -1,5 +1,5 @@
 ---
-title: "Markdown Is a Display Format. APE Is an Execution Format."
+title: "Human vs APE - Markdown is for Display. APE is for Execution."
 description: "Why getting LLMs to do what you want is a linguistics problem, not a prompting problem - and how a markup language might fix it."
 date: 2026-03-12
 tags:
@@ -8,7 +8,7 @@ tags:
   - agentic-coding
   - language-design
   - devlog
-draft: true
+draft: false
 author: "Brenna"
 ---
 
@@ -28,54 +28,58 @@ Austin called them **locution**, **illocution**, and **perlocution**. Stay with 
 
 Three layers. Three chances for the meaning to drift.
 
-Now here's the thing: when a human says "it's cold in here" to another human, there's a whole universe of shared context - body language, room temperature, relationship history, social norms - that helps the listener land on the right interpretation. We're pretty good at it. Not perfect, but pretty good.
+But when a human says "it's cold in here" to another human, there's a whole universe of shared context - where the speaker and listener are in relation to one another, body language, room temperature, relationship history, social norms - that helps the listener land on the right interpretation. As humans, we're decent at it. Not perfect, but good enough for most situations.
 
-LLMs don't have that universe.
+LLMs are an attempt to replicate that human-to-human communication pattern at scale. And by its very nature, the imperfections at human scale can quickly compound when translated to machine execution.
 
 ## The Double Drift Problem
 
 When you write instructions for an LLM, semantic drift happens *twice*.
 
-First, at the **authoring end**. You have an intent - something you want the agent to do. You encode that intent into text. But text is lossy. Your intent passes through your vocabulary, your assumptions about how the reader will interpret things, your implicit mental model of how the task should flow. By the time it's written down, it's already a *translation* of what you meant, not a *transcription*.
+### First, at the **authoring end**.
 
-Then, at the **interpretation end**. The LLM reads your text and builds its own model of what you meant. But it's pattern-matching against its training distribution, not against your intent. It has no access to what you were thinking when you wrote it. It has the locution - the literal words - and it's trying to reconstruct the illocution - the intended force - from that alone.
+You have an intent - something you want the agent to do. You encode that intent into text. But text is lossy. Your intent passes through your vocabulary, shaped by your lived experiences, your assumptions about how the reader will interpret things, your implicit mental model of how the task should flow. By the time it's written down, it's already a *translation* of what you meant, not a *transcription*.
 
-Two translation layers. Two places where meaning can slip. The gap between human "want" and machine "do" is where most prompt engineering pain lives.
+### Then, at the **interpretation end**.
+The LLM reads your text and builds its own model of what you meant. But it's pattern-matching against its training distribution, not against your intent. It has no access to what you were thinking when you wrote it. It has the locution (the literal words) and it's trying to reconstruct the illocution (the intended force) from that alone.
 
-And here's what I think makes this fundamentally harder than the human version: with humans, you can go back and forth. You can clarify. You can read the room. With an LLM executing a workflow, the instructions are fired and forgotten. The agent reads them once and runs.
+That’s a locutionary failure on both ends. You fail to encode your intent perfectly into words, and the LLM fails to decode those words back into your intent. By the time the instructions reach the execution phase, the illocutionary force—the "do this or else"—has been diluted into a mere suggestion.
+
+What I think makes this fundamentally harder than the human version: with humans, you can go back and forth. You can clarify. You can read the room. With an LLM executing a workflow, ideally the instructions are fired and forgotten. The agent reads them once and runs.
+
+(At least that's the spooky "singularity" version of it we're all busy building.)
 
 ## Where Markdown Falls Down
 
-So we have this drift problem. How do most people write LLM instructions today?
+How do most people write LLM instructions today?
 
 Markdown. System prompts. Scattered files full of prose.
 
-And markdown is great! I love markdown. But here's the thing - **markdown is a display format**. It was designed to describe how things should *look*. Headers, bold text, lists, code blocks - these are visual affordances. They tell a renderer how to present content to a human reader.
+And markdown is great! I love markdown. But **markdown is a display format**. It was designed to describe how things should *look*. Headers, bold text, lists, code blocks - these are visual affordances. They tell a renderer how to present content to a human reader.
 
 When you write LLM workflow instructions in markdown, you're using a display format for an execution task. You're describing *appearance* and hoping the agent infers *behavior*. Every heading, every bullet point, every bold phrase is a locution that the LLM has to decode into an illocution.
 
-"## Step 3: Validate the Output" - is that a suggestion? A requirement? What happens if validation fails? Do I stop? Try again? Skip it? The markdown doesn't say. It *can't* say, because it doesn't have the vocabulary for execution semantics. Markdown has no concept of gates, failure handlers, prerequisites, or scope.
+`## Step 3: Validate the Output` - is that a suggestion? A requirement? What happens if validation fails? Do I stop? Try again? Skip it? The markdown doesn't say. It *can't* say, because it doesn't have the vocabulary for execution semantics. Markdown has no concept of gates, failure handlers, prerequisites, or scope. We need _more markdown_ (and more prose) for that.
 
-You end up compensating with prose: "IMPORTANT: Do not proceed until..." and "NOTE: If this fails, go back to step 2 and..." and "Make sure you..." All of which are illocutionary cues stuffed into a format that has no structural way to enforce them.
+So, we end up compensating: `IMPORTANT: Do not proceed until...` and `NOTE: If this fails, go back to step 2 and...` and `Make sure you...` All of which are illocutionary cues stuffed into a format that has no structural way to enforce them.
 
-The LLM might follow them. It might not. It depends on how much attention it pays to your capitalized "IMPORTANT" versus the structural pull of the next heading.
+The LLM might follow them. It might not. It depends on how much attention it pays to your capitalized "IMPORTANT" versus the structural pull of the next heading versus how it's feeling that day.
 
-## APE: What Things Should *Be*
+And that leaves us in a neverending state of push and pull, with us constantly pushing the LLM to follow our wants and needs, and the whole process pulling us away from whatever-we-were-trying-to-do-in-the-first-place.
+
+## APE
 
 This is the problem I built APE to solve.
 
-APE - Applied Primitive Expression - is an XML markup language designed to treat the LLM as a runtime execution engine. Where markdown describes how things should *look*, APE describes what things should *be*.
+APE - Applied Primitive Execution - is an XML markup language designed to treat the LLM as a runtime execution engine. Where markdown describes how things should look, APE describes what things should be.
 
-That's the core distinction. **Markdown is a display format. APE is an execution format.**
+That's the core distinction. Markdown is a display format. APE is an execution format.
 
-In APE, the document *is* the workflow. It's self-contained. It declares who does what, what tools to use, when to stop and wait, and what to do on success or failure. Hand it to an agent; it runs.
+In APE, the document is the workflow. It's self-contained. It declares who does what, what tools to use, when to stop and wait, and what to do on success or failure. Hand it to an agent; it runs.
 
-The whole language boils down to two primitives:
+The whole spec is designed to be boiled down to only the absolute necessary primitives for workflow execution: flow control, input, output, and actions.
 
-- **`<command>`** - things you *do*. Shell commands, actions, decisions.
-- **`<resource>`** - things you *need*. Files, tools, services.
-
-Everything else is flow control and metadata. Steps, gates, variables, actors, constraints - these are all structural scaffolding around the two things that actually matter: what you do and what you need to do it.
+When you stop thinking in "prose" and start thinking in "primitives," your instruction set stops being a suggestion and starts being a runtime contract. `<command>` becomes an action with defined success/failure states. `<resource>` becomes an input dependency that must be satisfied. A `<gate>` becomes a conditional flow control element.
 
 Here's what a gate looks like in APE versus markdown:
 
@@ -121,17 +125,14 @@ The hypothesis is simple: if you give authors a way to express intent structural
 
 ## Why XML?
 
-I can already hear it. "XML? In 2026? Really?"
+I can already hear the mechanical keyboards clicking in protest:
+>"XML? In the year of our lord 2026?"
 
-Yeah, really. And here's why.
+This "LLM" thing we're talking about - it was raised by the XML, molded by it. If we want to talk to our machines, it's helpful to know what language *they* natively speak.
 
-Structure is the whole point. APE is trying to encode execution semantics - gates, scopes, failure handlers, prerequisites, conditional flows. These are inherently tree-shaped. XML gives you a tree where the tag names carry semantic meaning.
+There was actually a study that showed JSON can help, but this was for a slightly different purpose - output format. But regardless, have you ever tried to write a workflow by hand in JSON? JSON - that poor bastard of a data structure (jk, love you JSON, you're doing great!). But just think of all the matching brackets, the lack comments, no mixed content... It's miserable for humans. YAML is better to write but worse to parse unambiguously, and it has no schema language worth using.
 
-JSON would work for the data model, but have you ever tried to write a workflow by hand in JSON? Matching brackets, no comments, no mixed content. It's miserable for humans. YAML is better to write but worse to parse unambiguously, and it has no schema language worth using.
-
-XML has XSD for structural validation, it supports mixed content (prose + child tags in the same element), it's self-documenting (tags literally say what they mean), and every language on the planet can parse it.
-
-Is it verbose? Sure. But the verbosity is *clarity*. `<gate>` is clearer than whatever convention you'd invent in markdown to mean "this is an enforceable checkpoint."
+But that verbosity is a feature, not a bug. LLMs are essentially massive pattern-matchers; when they see a `<gate>` tag, they aren't just reading a word - they are entering a high-probability state associated with "validation" and "checkpointing." Structure provides semantic anchoring. It gives the model a clear hierarchy to attend to, making it much harder for the "important" instructions to get lost in the noise of the surrounding prose.
 
 ## What's Next
 
@@ -143,4 +144,13 @@ That's the next milestone, and it's the one that matters most. The hypothesis th
 
 If you've ever stared at a system prompt wondering why the LLM keeps ignoring your very clear instructions, you've felt the illocutionary gap. APE is my attempt to close it - not by writing better prose, but by giving authors a language where the structure *is* the intent.
 
-Markdown describes how things should look. APE describes what things should be. And the bet is that "what things should be" is a lot closer to what we actually mean.
+Markdown describes how things should look. Using Markdown to control an agent is like trying to use a restaurant menu to teach someone how to cook. It looks great, but it lacks the verbs.
+
+Think about the last time you added:
+
+`!!! REALLY SUPER DUPER IMPORTANT (SERIOUSLY) !!!`
+to a prompt.
+
+That was you trying to manually increase the illocutionary force of a format (markdown) that doesn't support it. You weren't programming; you were pleading.
+
+APE describes what things should be *and* how they should act. For people who want our machines to do things, the bet is that APE will help us get there faster.

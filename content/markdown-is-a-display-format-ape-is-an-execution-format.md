@@ -96,11 +96,10 @@ proceeding. If any tests fail, fix them before moving on.
 
 ```xml
 <step id="run-tests" number="3">
-  <description>Run Tests</description>
-  <instruction>Run the test suite.</instruction>
+  <action id="tests-pass"><command ref="all-tests" /></action>
   <gate>
-    <criteria>All tests pass.</criteria>
-    <on-fail>Fix failing tests before proceeding.</on-fail>
+    <criteria ref="tests-pass" />
+    <on-fail goto="debug" />
   </gate>
 </step>
 ```

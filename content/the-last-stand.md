@@ -1,6 +1,6 @@
 ---
-title: "The Last Stand"
-description: "Everyone says the trades will survive AI. I think the real question isn't whether AI can replace a plumber - it's whether you'll still be able to afford one."
+title: "The Regulatory Moat"
+description: 'Why "Learn a Trade" is a Political Bet, Not a Technical One'
 date: 2026-03-16
 tags:
   - ai
@@ -10,79 +10,68 @@ draft: true
 author: "Brenna"
 ---
 
-Everyone's got the same advice right now. "Learn a trade." Plumber, electrician, mechanic - the jobs AI supposedly can't touch because they require hands. Physical presence. A body in the room.
+The prevailing wisdom for surviving the "AI apocalypse" has become a cliché: **Learn a trade.**
 
-I don't think that's wrong, exactly. But I think it's incomplete in a way that matters a lot.
+The logic is simple: AI can’t crawl under a sink to fix a P-trap or climb a ladder to rewire a junction box. Because these jobs require physical presence and manual dexterity, the narrative suggests they are "safe." But this is a supply-side delusion. It assumes that as long as the work is hard for a robot to do, humans will be paid to do it.
 
-## The model
+It ignores the demand side of the equation - and the economic reality that is already hollowing out unregulated trades.
 
-Here's how I think about it. The demand for any trade is a function of two things: how many people *need* the work done, and how many of those people will actually hire someone to do it. That second part - the DIY rate - is where the whole argument falls apart.
+## The DIY Equation
 
-The DIY rate is driven by a handful of variables:
+To understand the future of the trades, we have to decompose "demand." The demand for professional services isn't just about the *existence* of a problem; it’s a function of the customer’s inability or unwillingness to solve it themselves.
 
-- **Knowledge** - do you know how to do it?
-- **Time** - do you have the hours to spend?
-- **Will** - are you motivated enough to try?
-- **Risk tolerance** - how scared are you of messing it up?
-- **Economic pressure** - can you afford *not* to try?
+$$Demand = Need \times (1 - DIY_{Rate})$$
 
-In a world where AI makes knowledge essentially free, where mass unemployment floods people with time, where economic pressure is squeezing harder than ever - nearly all of these variables push in the same direction. Toward doing it yourself.
+The **$DIY_{Rate}$** is the real threat to the trades. It isn’t a fixed number; it’s a variable driven by four accelerating factors:
 
-The only things that *don't* move are the hard constraints.
+* **Knowledge Accessibility:** Moving toward 1.0. Between YouTube and LLM-powered assistants, the "how-to" barrier is collapsing.
+* **Time Availability:** Rising. As AI displaces white-collar and administrative roles, people have more time than money.
+* **Economic Pressure:** Rising. In a world of job displacement, expendable income vanishes, forcing people to trade their time for savings.
+* **Material Accessibility:** Already high. Home improvement stores and e-commerce make professional-grade materials available to anyone.
 
-## The hard constraints
+When knowledge, time, and materials are abundant, the professional tradesperson is no longer selling a unique skill - they are selling a convenience that many can no longer afford.
 
-There are really only two:
+## The Risk Sliding Scale
 
-**Legal restrictions.** If the law says only a licensed electrician can wire your panel, you hire a licensed electrician. Full stop. It doesn't matter how good your AI tutorial is or how broke you are - you can't legally do it yourself.
+One common rebuttal is the "Risk Tax." The argument is that people won't DIY because they are afraid of burning their house down or flooding their basement.
 
-**Physical capability.** Your body either can or can't. No amount of knowledge or motivation replaces the ability to physically perform the work.
+But **economic risk is a sliding scale, not a hard floor.** Risk tolerance is compressed by economic pressure. We already see this: people drive uninsured, skip medical checkups, and perform "sketchy" electrical work when the alternative is a $400 bill they don't have. The "I might flood my basement" calculus looks very different when you're choosing between a DIY attempt and not paying rent.
 
-Everything else - knowledge, time, motivation, risk tolerance - all of it gets compressed toward "just do it yourself" as conditions deteriorate.
+## The Only Two Constraints Left
 
-## This is already happening
+If we strip away knowledge and risk tolerance, we are left with only two hard constraints that keep a trade professional:
 
-You don't have to squint to see this pattern. Mechanics are already living it. Auto repair has relatively few legal restrictions for work on your own vehicle. You can legally do almost anything to your own car. And mechanics' shops have never been emptier. People are strapped for cash, so they're watching YouTube videos, buying parts online, and figuring it out. Or they're just not fixing things at all.
+1. **Physical Capability:** Your body either can or can’t lift the water heater. (Internal/Binary).
+2. **Legal Restriction:** Does the law allow you to do this? (External/Binary).
 
-That's not an AI story yet. That's just economic pressure plus accessible knowledge doing exactly what you'd predict. AI is going to accelerate it.
+This is why mechanics are currently the "canary in the coal mine." Auto repair has relatively few legal restrictions; you can legally do almost anything to your own car. Consequently, mechanics are already seeing shops empty out as people - strapped for cash and armed with tutorials - take the wrench into their own hands.
 
-## Risk is a sliding scale, not a wall
+## The Regulatory Race
 
-You might be thinking "okay, but what about risk? I'm not going to rewire my own house - I could burn the place down." And yeah, that's a real consideration. But risk tolerance isn't a fixed barrier. It's a scale that moves with economic pressure.
+This leads to an uncomfortable conclusion: **The durability of a trade career is a political question, not a technical one.**
 
-Look at insurance. Some people max out their coverage. Some get the legal minimum. Some drive without any at all. Most people exist somewhere in those last two categories, and that distribution skews further toward "I'll take my chances" the more financially unstable things get.
+Electricians and plumbers aren't safer than mechanics because their work is "harder." They are safer because they have **Regulatory Capture.** They exist within a moat of licensing, code inspections, and permits. You hire a licensed electrician not because AI can't teach you to wire a panel, but because your municipality requires a licensed signature to keep your insurance valid.
 
-The calculus of "I might flood my basement" looks very different when you're choosing between a $400 plumber you can't afford and a tutorial that walks you through it step by step. Risk gets compressed right along with everything else.
+But even this moat has an expiration date.
 
-## The regulatory race
+We are entering a narrow window of "Regulatory Last Stands." Trades that can sneak in new regulations to protect their "moat" will survive longer. But as economic desperation grows, the political incentive flips.
 
-So here's where it gets interesting - and kind of uncomfortable.
+### The "Right to Repair" Battlefield
 
-If the only durable protection for a trade is legal restriction, then the survival of any given trade becomes a political question, not a technical one. Electricians don't survive because AI can't teach you to wire a panel. They survive because your municipality requires a licensed electrician to sign off on it.
+This is where the legal argument meets the technical one. Manufacturers are attempting to create "Private Regulation" through software locks - essentially DRM for physical hardware. The "Right to Repair" movement is the political counter-offensive. If the public's economic desperation is high enough, they will vote for candidates who force manufacturers to open their APIs, collapsing the proprietary moat and pushing those trades into "free game" territory.
 
-Which means we're watching a regulatory capture race. There's a narrow window right now where the threat is visible enough to motivate action, but not so advanced that the public turns against the protections. Trades that can lock in regulations *now* buy themselves more time. Trades that can't? They're exposed.
+### The Shift from Laborer to Auditor
 
-But even the regulatory moat isn't permanent. Because there's a counter-pressure building on the other side.
+Even in heavily regulated trades, the volume of work will likely collapse. If the "Knowledge Barrier" is gone, the professional stops being the person who *does* the work and becomes the person who *validates* it for the bank or the insurance company. Instead of paying a plumber for three days of labor, you pay them for 20 minutes to spend inspecting your work so they can sign the permit. The "hours worked" - the actual job - still vanishes.
 
-## The counter-pressure
+## The Queue
 
-If enough people are unemployed and broke, the political incentive flips. Licensing stops looking like consumer protection and starts looking like a cartel. "Why do I need to pay a licensed plumber when I can do it myself perfectly well?" becomes a voter issue.
+Regulation doesn’t save the trades; it just determines the order in which they fall:
 
-And historically, when the ratio gets lopsided enough - when you're protecting 50,000 professionals' jobs at the expense of 50 million people who can't afford to hire them - regulation loses. We've seen it play out before. Taxi medallions vs. rideshare. Legal services vs. LegalZoom and self-filing. Telehealth chipping away at in-person medical requirements. When enough people are on the wrong side of a gate, they vote to tear it down.
+1. **Unregulated Trades:** (Mechanics, Handymen) - Eroding now.
+2. **Moderately Regulated Trades:** (HVAC, Landscaping) - Following as DIY pressure builds.
+3. **Heavily Regulated Trades:** (Electricians, Plumbers) - Holding the line until the political pressure for deregulation becomes an electoral necessity.
 
-## The sequence
+When 50 million people can no longer afford to hire the 50,000 people protected by a license, "consumer protection" starts to look like a "cartel." Historically, when that ratio gets lopsided enough, the gates come down.
 
-So the way I see it playing out is something like this:
-
-1. **Unregulated trades erode first.** Mechanics, general handywork, anything where there's no legal barrier to DIY. This is already underway.
-2. **Lightly regulated trades follow.** As economic pressure builds and DIY success stories accumulate, people push into territory that's technically permitted but traditionally left to professionals.
-3. **Heavily regulated trades hold longest** - but face mounting political pressure to deregulate as the gap between "people who need the work done" and "people who can afford to hire someone" widens.
-4. **Eventually, the gates come down.** Not all at once, not everywhere equally. But the trend has a direction.
-
-## What this actually means
-
-The "learn a trade" advice isn't bad. Trades will decline slower than a lot of knowledge work. But the decline isn't being driven by AI *replacing* the tradesperson. It's being driven by AI enabling the *customer* to bypass them. The erosion comes from the demand side, not the supply side.
-
-And the thing that determines how fast any given trade erodes isn't how skilled it is, how physical it is, or how complex it is. It's how *regulated* it is. Which means the people telling you to learn a trade are really telling you to bet on regulatory capture holding. And that's a very different kind of bet.
-
-The last stand against AI isn't really against AI at all. It's a fight over who gets to keep the gates closed - and for how long.
+If your "AI-proof" career strategy relies on a regulatory moat, you aren't safe. You’re just further back in the queue.

@@ -1,5 +1,5 @@
 ---
-title: "The Queue"
+title: "The Queue - Where We Fall if We All 'Learn a Trade'"
 description: 'A critique of the comforting fantasy that physical work is protected from economic, institutional, and technological change.'
 date: 2026-03-16
 tags:

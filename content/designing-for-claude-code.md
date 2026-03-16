@@ -16,13 +16,14 @@ lastmod: 2026-02-25
 author: "Brenna"
 ---
 
-I've been building [Claude Code plugins](https://github.com/brennacodes/brenna-plugs) for a few months now - a whole marketplace of them, actually - and I recently started building plugins at work too. Somewhere between my fifth skill rewrite and my third "why did Claude forget that rule" incident, I realized I'd accidentally assembled a mental framework for *when to use what*.
+I've been building [Claude Code plugins](https://github.com/brennacodes/brenna-plugs) for a few months now - a whole marketplace of them, actually - and I recently started building plugins at work, too. Somewhere between my fifth skill rewrite and my third "why did Claude forget that rule" incident, I realized I'd accidentally assembled a mental framework for *when to use what*.
 
-This post is that framework, written down.
-
-Things are changing fast in this space. Like, *really* fast. I'll do my best to keep this updated as I learn more, and any time there are changes that impact what's here. But fair warning: if you're reading this six months from now, some of this might already be outdated. That's the deal with building on top of something that ships new features every week.
+This post is an attempt to codify that framework, and to share it with the community.
 
 Let's get into it.
+
+> [!note]
+> Things are changing fast in this space. Like, *really* fast. I'll do my best to keep this updated as I learn more, and any time there are changes that impact what's here. But fair warning: if you're reading this six months from now, some of this might already be outdated. That's the deal with building on top of something that ships new features every week.
 
 ## Core Philosophy
 

@@ -12,7 +12,7 @@ tags:
   - best-practices
   - guide
 draft: false
-lastmod: 2026-02-25
+lastmod: 2026-03-17
 author: "Brenna"
 ---
 
@@ -570,29 +570,55 @@ I've seen developers building bloated MCP servers with dozens of tools that just
 
 ## On Hook Events
 
-There are 17 hook events in Claude Code as of February 2026. Here's the complete list:
+| Event | When it fires |
+|---|---|
+| `SessionStart` | When a session begins or resumes |
+| `UserPromptSubmit` | When you submit a prompt, before Claude processes it |
+| `PreToolUse` | Before a tool call executes — can block it |
+| `PermissionRequest` | When a permission dialog appears |
+| `PostToolUse` | After a tool call succeeds |
+| `PostToolUseFailure` | After a tool call fails |
+| `Notification` | When Claude Code sends a notification |
+| `SubagentStart` | When a subagent is spawned |
+| `SubagentStop` | When a subagent finishes |
+| `Stop` | When Claude finishes responding |
+| `TeammateIdle` | When an agent team teammate is about to go idle |
+| `TaskCompleted` | When a task is being marked as completed |
+| `InstructionsLoaded` | When a CLAUDE.md or `.claude/rules/*.md` file is loaded into context |
+| `ConfigChange` | When a configuration file changes during a session |
+| `WorktreeCreate` | When a worktree is being created via `--worktree` or `isolation: "worktree"` — replaces default git behavior |
+| `WorktreeRemove` | When a worktree is being removed (at session exit or subagent finish) |
+| `PreCompact` | Before context compaction |
+| `PostCompact` | After context compaction completes |
+| `Elicitation` | When an MCP server requests user input during a tool call |
+| `ElicitationResult` | After a user responds to an MCP elicitation, before the response goes back to the server |
+| `SessionEnd` | When a session terminates |
 
-| Event | When it fires | Can block? |
+### Hook Handler Types
+
+Each hook specifies a `type` field:
+
+| Type | Description |
+|---|---|
+| `command` | Run a shell command. Input arrives on stdin as JSON. Output via stdout/stderr/exit code. |
+| `http` | POST event data to a URL. Response body uses same JSON format as command output. |
+| `prompt` | Single-turn LLM evaluation (Haiku by default). Returns `{"ok": true/false, "reason": "..."}`. |
+| `agent` | Multi-turn subagent with tool access. Up to 50 tool-use turns, 60s default timeout. Same ok/reason format. |
+
+### Matcher Patterns
+
+Matchers are regex patterns that filter when a hook fires. Each event type matches on a specific field:
+
+| Event | Matches on | Example values |
 |---|---|---|
-| SessionStart | Session begins/resumes | No |
-| UserPromptSubmit | User submits a prompt | Yes |
-| PreToolUse | Before a tool call | Yes |
-| PermissionRequest | Permission dialog appears | Yes |
-| PostToolUse | After tool succeeds | No (feedback only) |
-| PostToolUseFailure | After tool fails | No (feedback only) |
-| Notification | Notification sent | No |
-| SubagentStart | Subagent spawned | No |
-| SubagentStop | Subagent finishes | Yes |
-| Stop | Claude finishes responding | Yes |
-| TeammateIdle | Teammate about to idle | Yes |
-| TaskCompleted | Task marked completed | Yes |
-| ConfigChange | Config file changes | Yes |
-| WorktreeCreate | Worktree being created | Yes |
-| WorktreeRemove | Worktree being removed | No |
-| PreCompact | Before compaction | No |
-| SessionEnd | Session terminates | No |
-
-The ones you'll use most: **PreToolUse** (blocking dangerous commands, re-injecting rules), **PostToolUse** (formatting after edits), **Stop** (verification before Claude finishes), and **Notification** (desktop alerts).
+| `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest` | tool name | `Bash`, `Edit\|Write`, `mcp__.*` |
+| `SessionStart` | how session started | `startup`, `resume`, `clear`, `compact` |
+| `SessionEnd` | why session ended | `clear`, `logout`, `prompt_input_exit`, `bypass_permissions_disabled`, `other` |
+| `Notification` | notification type | `permission_prompt`, `idle_prompt`, `auth_success`, `elicitation_dialog` |
+| `SubagentStart` / `SubagentStop` | agent type | `Bash`, `Explore`, `Plan`, or custom names |
+| `PreCompact` | trigger cause | `manual`, `auto` |
+| `ConfigChange` | config source | `user_settings`, `project_settings`, `local_settings`, `policy_settings`, `skills` |
+| `UserPromptSubmit`, `Stop`, `TeammateIdle`, `TaskCompleted`, `WorktreeCreate`, `WorktreeRemove` | — | no matcher support; always fires |
 
 ---
 

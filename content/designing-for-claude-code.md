@@ -22,6 +22,23 @@ This post is an attempt to codify that framework, and to share it with the commu
 
 Let's get into it.
 
+This is a long one. Here's the map if you want to jump ahead:
+
+- [Core Philosophy](#core-philosophy) — three principles that inform every decision
+- [The Decision Matrix](#the-decision-matrix) — how to route any behavior to the right tool
+  - [When to use a Hook](#1-does-this-need-to-happen-every-single-time-no-exceptions)
+  - [When to use a Skill](#2-is-this-reusable-knowledge-a-workflow-or-a-procedure-claude-should-follow)
+  - [When to use a Subagent](#3-does-this-task-need-isolated-context-restricted-tools-or-a-specialized-persona)
+  - [When to use CLAUDE.md](#4-is-this-project-level-context-that-claude-needs-in-every-session)
+  - [When to use Memory or Tasks](#5-does-this-need-to-persist-across-sessions)
+  - [When to use LSP](#6-does-claude-need-real-time-code-intelligence-for-this-project)
+- [Composable Workflow Patterns](#composable-workflow-patterns) — five patterns that hold up in practice (Skill+Hook, Skill+Subagent, XML branching, shared steps, autonomous orchestration)
+- [Sandboxing Integration](#sandboxing-integration) — how sandboxing changes what's possible
+- [Anti-Patterns to Avoid](#anti-patterns-to-avoid) — eight mistakes, all mine
+- [Quick Reference](#quick-reference-where-does-this-go) — routing table for common behaviors
+- [Hook Events Reference](#on-hook-events) — all 21 events, handler types, and matcher patterns
+- [Getting Started](#getting-started) — the order to layer things in
+
 > [!note]
 > Things are changing fast in this space. Like, *really* fast. I'll do my best to keep this updated as I learn more, and any time there are changes that impact what's here. But fair warning: if you're reading this six months from now, some of this might already be outdated. That's the deal with building on top of something that ships new features every week.
 

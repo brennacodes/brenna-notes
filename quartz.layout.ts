@@ -6,7 +6,11 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [
-    Component.RecentNotes({ limit: 10, showTags: true }),
+    Component.RecentNotes({
+      limit: 10,
+      showTags: true,
+      filter: (f) => f.slug !== "index",
+    }),
   ],
   footer: Component.Footer({
     links: {

@@ -184,6 +184,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     "--dark",
     "--darkgray",
     "--bodyFont",
+    "--tag-color",
   ] as const
   const computedStyleMap = cssVars.reduce(
     (acc, key) => {
@@ -201,7 +202,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     } else if (visited.has(d.id) || d.id.startsWith("tags/")) {
       return computedStyleMap["--tertiary"]
     } else {
-      return computedStyleMap["--gray"]
+      return computedStyleMap["--secondary"]
     }
   }
 
@@ -262,7 +263,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         alpha = l.active ? 1 : 0.2
       }
 
-      l.color = l.active ? computedStyleMap["--gray"] : computedStyleMap["--lightgray"]
+      l.color = l.active ? computedStyleMap["--tertiary"] : computedStyleMap["--lightgray"]
       tweenGroup.add(new Tweened<LinkRenderData>(l).to({ alpha }, 200))
     }
 

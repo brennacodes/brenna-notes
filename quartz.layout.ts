@@ -49,7 +49,16 @@ export const defaultContentPageLayout: PageLayout = {
   ],
   right: [
     Component.ConditionalRender({
-      component: Component.Graph({ localGraph: { depth: -1, showTags: true } }),
+      component: Component.Graph({
+        localGraph: {
+          depth: -1,
+          showTags: true,
+          scale: 0.9,
+          centerForce: 0.5,
+          repelForce: 0.5,
+          enableRadial: true,
+        },
+      }),
       condition: (page) => page.fileData.slug === "index",
     }),
     Component.ConditionalRender({

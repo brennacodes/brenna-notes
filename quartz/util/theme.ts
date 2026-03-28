@@ -154,6 +154,10 @@ ${stylesheet.join("\n\n")}
   --tertiary: ${theme.colors.lightMode.tertiary};
   --highlight: ${theme.colors.lightMode.highlight};
   --textHighlight: ${theme.colors.lightMode.textHighlight};
+  --tag-color: #97c1b3;
+  --tag-bg: #e6ff005c;
+  --tag-hover: #f806d9;
+  --tag-hover-bg: #e6ff01;
 
   --titleFont: "${getFontSpecificationName(theme.typography.title || theme.typography.header)}", ${DEFAULT_SANS_SERIF};
   --headerFont: "${getFontSpecificationName(theme.typography.header)}", ${DEFAULT_SANS_SERIF};
@@ -171,6 +175,10 @@ ${stylesheet.join("\n\n")}
   --tertiary: ${theme.colors.darkMode.tertiary};
   --highlight: ${theme.colors.darkMode.highlight};
   --textHighlight: ${theme.colors.darkMode.textHighlight};
+  --tag-color: #497460;
+  --tag-bg: rgba(73, 116, 96, 0.1);
+  --tag-hover: #20cb72;
+  --tag-hover-bg: rgba(32, 203, 114, 0.15);
 }
 `
 }

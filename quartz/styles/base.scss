@@ -113,8 +113,16 @@ a {
       padding: 0;
     }
     &.tag-link {
+      color: var(--tag-color);
+      background-color: var(--tag-bg);
+
       &::before {
         content: "#";
+      }
+
+      &:hover {
+        color: var(--tag-hover);
+        background-color: var(--tag-hover-bg, var(--tag-bg));
       }
     }
   }

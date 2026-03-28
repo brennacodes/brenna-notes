@@ -74,7 +74,20 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
           <li class="section-li">
             <div class="section">
               <p class="meta">
-                {page.dates && <Date date={getDate(cfg, page)!} locale={cfg.locale} />}
+                {page.dates && (
+                  <>
+                    <Date date={page.dates.created} locale={cfg.locale} />
+                    {page.frontmatter?.hasExplicitModified &&
+                      page.dates.modified &&
+                      page.dates.created &&
+                      page.dates.modified.getTime() !== page.dates.created.getTime() && (
+                        <span>
+                          {" "}
+                          (updated <Date date={page.dates.modified} locale={cfg.locale} />)
+                        </span>
+                      )}
+                  </>
+                )}
               </p>
               <div class="desc">
                 <h3>

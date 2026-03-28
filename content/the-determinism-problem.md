@@ -1,5 +1,5 @@
 ---
-title: "The Determinism Problem"
+title: "The Determinism Problem - What Building AI Tools Actually Taught Me About AI"
 description: "What building AI tools actually taught me about AI - determinism, auditability, trigger words, and why the conversation IS the product."
 date: 2026-03-28
 tags:

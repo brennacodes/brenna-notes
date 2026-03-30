@@ -1,3 +1,99 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+
+@media print {
+  // Hide non-content elements
+  .sidebar,
+  .page-footer,
+  footer,
+  .backlinks,
+  .graph,
+  .explorer,
+  .search,
+  .darkmode,
+  .navigation-progress,
+  .popover,
+  .global-graph-outer,
+  .mermaid-container,
+  #progress-bar {
+    display: none !important;
+  }
+
+  // Reset the grid to single-column content only
+  #quartz-body {
+    display: block !important;
+    max-width: 100% !important;
+  }
+
+  // Constrain page width and remove excess margin
+  .page {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  // Reset page header spacing
+  .page-header {
+    margin-top: 0 !important;
+  }
+
+  // Ensure content fills the page
+  .center {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  // Remove any fixed/sticky positioning
+  * {
+    position: static !important;
+  }
+
+  // Re-apply relative positioning where needed for layout
+  article {
+    position: relative !important;
+  }
+
+  // Print-friendly colors
+  body {
+    background: white !important;
+    color: black !important;
+    overflow: visible !important;
+  }
+
+  article, article * {
+    color: black !important;
+    background: transparent !important;
+  }
+
+  // Readable links
+  a {
+    color: #333 !important;
+    text-decoration: underline !important;
+  }
+
+  // Code blocks: light background for readability
+  pre {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+  }
+
+  code {
+    background: #f0f0f0 !important;
+    color: #333 !important;
+  }
+
+  // Tags
+  .tag-link {
+    color: #555 !important;
+    border-color: #999 !important;
+  }
+
+  // Avoid breaking inside key elements
+  pre, blockquote, img, table {
+    break-inside: avoid;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    break-after: avoid;
+  }
+}

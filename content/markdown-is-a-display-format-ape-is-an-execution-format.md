@@ -2,6 +2,7 @@
 title: "Human vs APE - Markdown is for Display. APE is for Execution."
 description: "Why getting LLMs to do what you want is a linguistics problem, not a prompting problem - and how a markup language might fix it."
 date: 2026-03-12
+lastmod: 2026-08-17
 tags:
   - programming
   - ai-agents
@@ -71,7 +72,7 @@ And that leaves us in a neverending state of push and pull, with us constantly p
 
 This is the problem I built APE to solve.
 
-APE - Applied Primitive Execution - is an XML markup language designed to treat the LLM as a runtime execution engine. Where markdown describes how things should look, APE describes what things should be.
+APE - Applied Primitive Expression - is an XML markup language designed to treat the LLM as a runtime execution engine. Where markdown describes how things should look, APE describes what things should be.
 
 That's the core distinction. Markdown is a display format. APE is an execution format.
 
